@@ -1,5 +1,7 @@
 package com.skypro.employee.record;
 
+import java.util.Objects;
+
 public class EmployeeRequest {
     private String firstName;
     private String lastName;
@@ -36,5 +38,28 @@ public class EmployeeRequest {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeRequest that = (EmployeeRequest) o;
+        return department == that.department && salary == that.salary && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, department, salary);
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeRequest{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", department=" + department +
+                ", salary=" + salary +
+                '}';
     }
 }
