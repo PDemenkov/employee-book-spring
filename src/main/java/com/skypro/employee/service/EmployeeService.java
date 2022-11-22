@@ -1,13 +1,14 @@
 package com.skypro.employee.service;
 
+import com.skypro.employee.exception.EmployeeNotFoundException;
+import com.skypro.employee.exception.InvalidEmployeeRequestException;
 import com.skypro.employee.model.Employee;
 import com.skypro.employee.record.EmployeeRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.DoubleAccumulator;
 import java.util.stream.Collectors;
 
 //здесь хранятся сотрудники
@@ -21,10 +22,16 @@ public class EmployeeService {
     }
 
     public Employee addEmployee(EmployeeRequest employeeRequest) {
-        if (employeeRequest.getFirstName() == null || employeeRequest.getLastName() == null) {
-            throw new IllegalArgumentException("Employee name should be set");
+       if (!StringUtils.isAlpha(employeeRequest.getLastName()) ||
+       !StringUtils.isAlpha(employeeRequest.getFirstName()))
+        {
+            throw new InvalidEmployeeRequestException();
         }
-        Employee employee = new Employee(employeeRequest.getFirstName(), employeeRequest.getLastName(), employeeRequest.getDepartment(), employeeRequest.getSalary());
+        Employee employee = new Employee(
+             StringUtils.capitalize(employeeRequest.getFirstName()),
+                StringUtils.capitalize(employeeRequest.getLastName()),
+                employeeRequest.getDepartment(),
+                employeeRequest.getSalary());
 
         this.employees.put(employee.getId(), employee);
         return employee;
@@ -36,32 +43,32 @@ public class EmployeeService {
                 .sum();
     }
 
-public Collection<Employee> getSalaryMax() {
-    int sal = employees.values().stream()
-            .mapToInt(Employee::getSalary)
-            .max().getAsInt();
-    return employees.values().stream().filter(e->e.getSalary()==sal).toList();
-}
-//    public Employee getSalaryMax1() {
-//        return employees.values().stream().max(Comparator.comparing(Employee::getSalary)).get();
-//    }
-    public Collection<Employee> getSalaryMin() {
-        int sal = employees.values().stream()
-                .mapToInt(Employee::getSalary)
-                .min().getAsInt();
+    public Employee getEmployeeWithMaxSalary() {
         return employees.values().stream()
-                .filter(e->e.getSalary()==sal).toList();
+                .max(Comparator.comparingInt(Employee::getSalary))
+                .orElseThrow(EmployeeNotFoundException::new);
     }
 
-//    public Employee getSalaryMin1() {
-//        return employees.values().stream().min(Comparator.comparing(Employee::getSalary)).get();
-//    }
-
-    public Collection<Employee> getEmployeeBiggerThanAverage() {
-        double opt = employees.values().stream()
-                .mapToInt(Employee::getSalary)
-                .average().getAsDouble();
+    public Employee getEmployeeWithMinSalary() {
         return employees.values().stream()
-                .filter(employee -> employee.getSalary() > opt).collect(Collectors.toList());
+                .min(Comparator.comparingInt(Employee::getSalary))
+                .orElseThrow(EmployeeNotFoundException::new);
+    }
+
+    public List<Employee> getEmployeesWithSalaryMoreThatAverage() {
+        Double averageSalary = getAverageSalary();
+        if (averageSalary == null) {
+            return Collections.emptyList();
+        }
+        return employees.values().stream().filter(e->e.getSalary() > averageSalary)
+                .collect(Collectors.toList());
+    }
+
+    private Double getAverageSalary() {
+//        employees.values().stream().mapToInt(Employee::getSalary).average(); //возвр Optional
+        return employees.values()
+                .stream()
+                .collect(Collectors.averagingInt(Employee::getSalary));  //всегда возвр знач
+
     }
 }
