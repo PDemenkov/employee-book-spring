@@ -8,6 +8,13 @@ public class EmployeeRequest {
     private int department;
     private int salary;
 
+    public EmployeeRequest(String firstName, String lastName, int department, int salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.department = department;
+        this.salary = salary;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -40,26 +47,5 @@ public class EmployeeRequest {
         this.salary = salary;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EmployeeRequest that = (EmployeeRequest) o;
-        return department == that.department && salary == that.salary && Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, department, salary);
-    }
-
-    @Override
-    public String toString() {
-        return "EmployeeRequest{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", department=" + department +
-                ", salary=" + salary +
-                '}';
-    }
-}

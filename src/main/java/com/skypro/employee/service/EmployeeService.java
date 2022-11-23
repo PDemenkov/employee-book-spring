@@ -21,14 +21,13 @@ public class EmployeeService {
         return this.employees.values();
     }
 
-    public Employee addEmployee(EmployeeRequest employeeRequest) {
-       if (!StringUtils.isAlpha(employeeRequest.getLastName()) ||
-       !StringUtils.isAlpha(employeeRequest.getFirstName()))
-        {
+    public Employee addEmployee(EmployeeRequest employeeRequest) {  //покрыть неправильное добавление сотрудника
+        if (!StringUtils.isAlpha(employeeRequest.getLastName()) || //возвращает исключение
+                !StringUtils.isAlpha(employeeRequest.getFirstName())) {
             throw new InvalidEmployeeRequestException();
         }
         Employee employee = new Employee(
-             StringUtils.capitalize(employeeRequest.getFirstName()),
+                StringUtils.capitalize(employeeRequest.getFirstName()), // если с имя в нижнем регистре, то капитализация
                 StringUtils.capitalize(employeeRequest.getLastName()),
                 employeeRequest.getDepartment(),
                 employeeRequest.getSalary());
@@ -55,20 +54,24 @@ public class EmployeeService {
                 .orElseThrow(EmployeeNotFoundException::new);
     }
 
-    public List<Employee> getEmployeesWithSalaryMoreThatAverage() {
+    public List<Employee> getEmployeesWithSalaryMoreThatAverage() { // еще этот
         Double averageSalary = getAverageSalary();
         if (averageSalary == null) {
             return Collections.emptyList();
         }
-        return employees.values().stream().filter(e->e.getSalary() > averageSalary)
+        return employees.values().stream().filter(e -> e.getSalary() > averageSalary)
                 .collect(Collectors.toList());
     }
 
-    private Double getAverageSalary() {
+    public Double getAverageSalary() { //++
 //        employees.values().stream().mapToInt(Employee::getSalary).average(); //возвр Optional
         return employees.values()
                 .stream()
                 .collect(Collectors.averagingInt(Employee::getSalary));  //всегда возвр знач
 
+    }
+
+    public Employee removeEmployee(int id) {
+        return employees.remove(id);
     }
 }
