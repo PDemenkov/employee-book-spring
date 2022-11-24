@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
@@ -64,22 +63,19 @@ public class DepartmentServiceTest {
         assertThat(min).isEqualTo(5);
     }
 
-//    @Test
-//    void groupedEmployees() {
-//        Map<Integer,List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
-//        assertThat(groupedEmployees).hasSize(2)
-//                .containsKey(3)
-//                .containsKey(5)
-//                .containsEntry(3, List.of(employees.get(0), employees.get(1)))
-//                .containEntry(5, List.of(employees.get(2), employees.get(4)));
-//    }
-//    @Test
-//    void WhenNoEmpThenGroupByReturnEmptyMap() {
-//        when(employeeService.getAllEmployees()).thenReturn(List.of());
-//
-//        Map<Integer,List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
-//        assertThat(groupedEmployees).isEmpty();
-//    }
+    @Test
+    void groupedEmployees() {
+        Map<Integer,List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
+        Assertions.assertThat(groupedEmployees).hasSize(2)
+                .containsEntry(3, List.of(employees.get(0), employees.get(1)))
+                .containsEntry(5, List.of(employees.get(2)));
+    }
+    @Test
+    void WhenNoEmpThenGroupByReturnEmptyMap() {
+        when(employeeService.getAllEmployees()).thenReturn(List.of());
+
+        Map<Integer,List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
+    }
 
     @Test
     void WhenNoEmployeesThenMaxSalaryInDepThrowsException() {
