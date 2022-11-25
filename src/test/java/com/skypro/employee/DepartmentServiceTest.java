@@ -5,22 +5,19 @@ import com.skypro.employee.model.Employee;
 import com.skypro.employee.service.DepartmentService;
 import com.skypro.employee.service.EmployeeService;
 
-import static org.assertj.core.api.Assertions.*;
-
-import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
@@ -44,7 +41,7 @@ public class DepartmentServiceTest {
     @Test
     void getEmployeesByDepartment() {
         Collection<Employee> employeesList = this.departmentService.getDepartmentEmployees(3);
-        Assertions.assertThat(employeesList).hasSize(2)
+        assertThat(employeesList).hasSize(2)
                 .contains(employees.get(0), employees.get(1));
     }
 
