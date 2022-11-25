@@ -35,5 +35,18 @@ GET http://localhost:8080/employees/salary/min
 ### Получить сотрудников, зарплата которых больше средней зп
 GET http://localhost:8080/employees/highSalary
 
+### Получить сотрудников по отделам
+GET http://localhost:8080/department?dep=2
 
+### Получить сумму зп по отделам
+GET http://localhost:8080/department/getSalSumByDep?dep=2
+
+### Получить макс сумму зп по отделам ыва
+GET http://localhost:8080/department/getMaxSalInDep?dep=2
+
+### Получить мин сумму зп по отделам
+GET http://localhost:8080/department/getMinSalInDep?dep=2
+
+### Получить сотрудников по отделам
+GET http://localhost:8080/department/getEmpGroupedByDeps
 
