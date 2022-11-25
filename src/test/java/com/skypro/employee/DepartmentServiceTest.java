@@ -1,9 +1,12 @@
 package com.skypro.employee;
+
 import com.skypro.employee.exception.EmployeeNotFoundException;
 import com.skypro.employee.model.Employee;
 import com.skypro.employee.service.DepartmentService;
 import com.skypro.employee.service.EmployeeService;
+
 import static org.assertj.core.api.Assertions.*;
+
 import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,8 +19,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class DepartmentServiceTest {
@@ -48,7 +51,7 @@ public class DepartmentServiceTest {
     @Test
     void getSumSalaryByDep() {
         int sum = this.departmentService.getSalSumByDep(3);
-         assertThat(sum).isEqualTo(11);
+        assertThat(sum).isEqualTo(11);
     }
 
     @Test
@@ -65,16 +68,17 @@ public class DepartmentServiceTest {
 
     @Test
     void groupedEmployees() {
-        Map<Integer,List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
-        Assertions.assertThat(groupedEmployees).hasSize(2)
+        Map<Integer, List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
+        assertThat(groupedEmployees).hasSize(2)
                 .containsEntry(3, List.of(employees.get(0), employees.get(1)))
                 .containsEntry(5, List.of(employees.get(2)));
     }
+
     @Test
     void WhenNoEmpThenGroupByReturnEmptyMap() {
         when(employeeService.getAllEmployees()).thenReturn(List.of());
 
-        Map<Integer,List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
+        Map<Integer, List<Employee>> groupedEmployees = this.departmentService.getEmpGroupedByDeps();
     }
 
     @Test
